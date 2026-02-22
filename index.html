@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Best Decision Ever 💗</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ffc0cb, #ff9eb5);
+    overflow: hidden;
+    color: white;
+    text-align: center;
+}
+
+.container {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.text-box {
+    font-size: 22px;
+    max-width: 90%;
+    min-height: 120px;
+    margin-bottom: 30px;
+}
+
+button {
+    background: #ff5e8a;
+    border: none;
+    padding: 12px 25px;
+    margin: 10px;
+    font-size: 16px;
+    border-radius: 25px;
+    cursor: pointer;
+    color: white;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.1);
+    background: #ff2f6d;
+}
+
+.progress {
+    position: absolute;
+    top: 20px;
+    font-size: 14px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 20px;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.heart {
+    position: absolute;
+    color: white;
+    animation: float 6s linear infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(100vh); opacity: 1; }
+    100% { transform: translateY(-10vh); opacity: 0; }
+}
+
+.shake {
+    animation: shake 0.4s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="progress" id="progress">Level 1 / 6</div>
+    <div class="text-box" id="text"></div>
+    <div id="buttons"></div>
+    <div class="footer">Made with love by Aayush 💗</div>
+</div>
+
+<audio id="bgMusic" loop>
+    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8d1b9a5e3.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const textBox = document.getElementById("text");
+const buttonsDiv = document.getElementById("buttons");
+const progress = document.getElementById("progress");
+const music = document.getElementById("bgMusic");
+
+let currentStep = 1;
+
+function typeText(text, callback) {
+    textBox.innerHTML = "";
+    let i = 0;
+    const interval = setInterval(() => {
+        textBox.innerHTML += text.charAt(i);
+        i++;
+        if (i >= text.length) {
+            clearInterval(interval);
+            if (callback) callback();
+        }
+    }, 30);
+}
+
+function createButtons(options) {
+    buttonsDiv.innerHTML = "";
+    options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.innerText = option.text;
+        btn.onclick = option.action;
+        buttonsDiv.appendChild(btn);
+    });
+}
+
+function startMusic() {
+    music.play();
+}
+
+function nextStep(text, options) {
+    currentStep++;
+    progress.innerText = "Level " + currentStep + " / 6";
+    typeText(text, () => createButtons(options));
+}
+
+function wrongAnswer() {
+    document.body.classList.add("shake");
+    setTimeout(() => {
+        document.body.classList.remove("shake");
+    }, 400);
+}
+
+function showConfetti() {
+    for (let i = 0; i < 100; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = Math.random() * 20 + 10 + "px";
+        heart.style.animationDuration = Math.random() * 3 + 3 + "s";
+        document.body.appendChild(heart);
+    }
+}
+
+function startGame() {
+    typeText("Hey Birthday Girl 💗 Ready to play a tiny game?", () => {
+        createButtons([
+            { text: "I was born ready 😌", action: () => {
+                startMusic();
+                nextStep("Do you remember when we first started talking?", [
+                    { text: "Of course 🥹", action: memory },
+                    { text: "Remind me...", action: memory }
+                ]);
+            }},
+            { text: "Only if it's cute", action: () => {
+                startMusic();
+                nextStep("Trust me... it's very cute. Do you remember when we first started talking?", [
+                    { text: "Of course 🥹", action: memory },
+                    { text: "Remind me...", action: memory }
+                ]);
+            }}
+        ]);
+    });
+}
+
+function memory() {
+    nextStep("That day changed my life. What kind of couple are we?", [
+        { text: "Cute & Soft", action: vibe },
+        { text: "Crackhead Energy", action: vibe }
+    ]);
+}
+
+function vibe() {
+    nextStep("Be honest... Did you imagine we'd become this?", [
+        { text: "Yes. I felt it.", action: emotional },
+        { text: "No. It surprised me.", action: emotional }
+    ]);
+}
+
+function emotional() {
+    nextStep("Final question... If I had to choose one person to annoy forever, who would it be?", [
+        { text: "Me 😌", action: proposal },
+        { text: "Someone else?", action: wrongAnswer }
+    ]);
+}
+
+function proposal() {
+    progress.innerText = "Final Level 💍";
+    showConfetti();
+    typeText("From the first hello to every laugh... You became my favorite person. Will you continue being my person for all birthdays to come? 💖", () => {
+        createButtons([
+            { text: "Yes. Always 💗", action: finalMessage },
+            { text: "Obviously, idiot 😌", action: finalMessage }
+        ]);
+    });
+}
+
+function finalMessage() {
+    showConfetti();
+    typeText("Happy Birthday, My Love 💗 You are the best decision I ever made.");
+    buttonsDiv.innerHTML = "";
+}
+
+startGame();
+</script>
+
+</body>
+</html>
