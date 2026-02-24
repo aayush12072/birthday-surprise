@@ -1,29 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For You</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
+*{margin:0;padding:0;box-sizing:border-box;}
 body{
 font-family:'Inter',sans-serif;
-background:#fdf6f8;
-color:#2c2c2c;
+background:#f9f5f7;
+color:#222;
 height:100vh;
+overflow:hidden;
 display:flex;
 justify-content:center;
 align-items:center;
-overflow:hidden;
 }
 
 .wrapper{
@@ -32,17 +25,18 @@ max-width:430px;
 height:100vh;
 display:flex;
 flex-direction:column;
+position:relative;
 }
 
 .progress-container{
-height:3px;
+height:4px;
 background:#eee;
 }
 
 .progress-bar{
 height:100%;
 width:0%;
-background:#d46a8c;
+background:#c06c84;
 transition:0.6s ease;
 }
 
@@ -51,8 +45,9 @@ flex:1;
 display:flex;
 flex-direction:column;
 justify-content:center;
-padding:40px 30px;
-transition:0.5s ease;
+padding:40px 28px;
+text-align:center;
+position:relative;
 }
 
 .title{
@@ -60,50 +55,52 @@ font-family:'Playfair Display',serif;
 font-size:24px;
 margin-bottom:25px;
 line-height:1.4;
-text-align:center;
+min-height:80px;
 }
 
 .buttons{
 display:flex;
 flex-direction:column;
-gap:16px; /* spacing added */
-margin-top:20px;
+gap:18px;
+margin-top:10px;
 }
 
 button{
 padding:14px 20px;
 border-radius:40px;
-border:1px solid #d46a8c;
+border:1px solid #c06c84;
 background:white;
 font-size:15px;
-letter-spacing:0.5px;
 cursor:pointer;
 transition:0.3s;
+position:relative;
 }
 
 button:hover{
-background:#d46a8c;
+background:#c06c84;
 color:white;
 }
 
 .memory-grid{
 display:grid;
 grid-template-columns:repeat(4,1fr);
-gap:12px;
+gap:10px;
 margin-top:30px;
+justify-items:center;
 }
 
 .card{
-aspect-ratio:1/1;
+width:70px;
+height:70px;
 perspective:1000px;
 }
 
 .card-inner{
 width:100%;
 height:100%;
-position:relative;
 transform-style:preserve-3d;
 transition:0.6s;
+position:relative;
 }
 
 .card.flipped .card-inner{
@@ -115,70 +112,75 @@ position:absolute;
 width:100%;
 height:100%;
 border-radius:12px;
+backface-visibility:hidden;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:20px;
-backface-visibility:hidden;
+overflow:hidden;
 }
 
 .card-front{
-background:#d46a8c;
-color:white;
+background:#c06c84;
 }
 
 .card-back{
-background:white;
 transform:rotateY(180deg);
-border:1px solid #ddd;
+background:white;
+}
+
+.card-back img{
+width:100%;
+height:100%;
+object-fit:cover;
 }
 
 .footer{
 text-align:center;
 font-size:12px;
 color:#999;
-padding-bottom:15px;
+padding-bottom:10px;
 }
 
+.move-button{
+position:absolute;
+transition:0.3s;
+}
 </style>
 </head>
 <body>
 
 <div class="wrapper">
-
 <div class="progress-container">
 <div class="progress-bar" id="progressBar"></div>
 </div>
 
-<div class="content" id="content">
+<div class="content">
 <div class="title" id="text"></div>
 <div class="buttons" id="buttons"></div>
 <div id="memoryArea"></div>
 </div>
 
 <div class="footer">Made for you</div>
-
 </div>
 
 <script>
 
-let step = 0;
-let totalSteps = 8;
-const progressBar = document.getElementById("progressBar");
+let step=0;
+let totalSteps=6;
+let prankClicks=0;
+const progressBar=document.getElementById("progressBar");
 
 function updateProgress(){
-progressBar.style.width = (step/totalSteps)*100 + "%";
+progressBar.style.width=(step/totalSteps)*100+"%";
 }
 
-function renderSlide(text, options){
+function slide(text,options){
 step++;
 updateProgress();
 document.getElementById("memoryArea").innerHTML="";
 document.getElementById("text").innerHTML=text;
-
 const btnArea=document.getElementById("buttons");
 btnArea.innerHTML="";
-
 options.forEach(opt=>{
 let btn=document.createElement("button");
 btn.innerText=opt.text;
@@ -187,52 +189,33 @@ btnArea.appendChild(btn);
 });
 }
 
-
-/* -------- Slides -------- */
+/* Slides */
 
 function start(){
-renderSlide("Before we continue… I want you to take a slow breath.",[
-{text:"Okay.",action:slide2}
+slide("You didn’t think I’d just say Happy Birthday normally… did you?",[
+{text:"No 😌",action:slide2}
 ]);
 }
 
 function slide2(){
-renderSlide("Do you remember how this all began?",[
-{text:"Yes.",action:slide3},
-{text:"Remind me.",action:slide3}
+slide("Before your surprise, prove something.",[
+{text:"What?",action:startMemoryGame}
 ]);
 }
 
-function slide3(){
-renderSlide("Somehow, somewhere between conversations… you became important.",[
-{text:"Continue.",action:slide4}
-]);
-}
-
-function slide4(){
-renderSlide("More than important. Essential.",[
-{text:"Go on.",action:slide5}
-]);
-}
-
-function slide5(){
-renderSlide("Before I say anything more… you have to earn it.",[
-{text:"What do I have to do?",action:startMemoryGame}
-]);
-}
-
-
-/* -------- Memory Game -------- */
+/* Heart Shaped Premium Memory */
 
 function startMemoryGame(){
-step++;
-updateProgress();
-
+progressBar.style.width="100%";
+document.getElementById("text").innerHTML="Match every pair.";
 document.getElementById("buttons").innerHTML="";
-document.getElementById("text").innerHTML="Match all pairs to continue.";
 
-const symbols=["♡","∞","✿","✧","☾","✦","♥","✺"];
-let cards=[...symbols,...symbols];
+const images=[
+"img1.jpg","img2.jpg","img3.jpg","img4.jpg",
+"img5.jpg","img6.jpg","img7.jpg","img8.jpg"
+];
+
+let cards=[...images,...images];
 cards.sort(()=>0.5-Math.random());
 
 const grid=document.createElement("div");
@@ -240,25 +223,23 @@ grid.className="memory-grid";
 document.getElementById("memoryArea").innerHTML="";
 document.getElementById("memoryArea").appendChild(grid);
 
-let first=null;
-let second=null;
-let lock=false;
-let matches=0;
+let first=null,second=null,lock=false,matches=0;
 
-cards.forEach(symbol=>{
+cards.forEach(src=>{
 const card=document.createElement("div");
 card.className="card";
 
 card.innerHTML=`
 <div class="card-inner">
 <div class="card-face card-front"></div>
-<div class="card-face card-back">${symbol}</div>
+<div class="card-face card-back">
+<img src="${src}">
+</div>
 </div>
 `;
 
 card.addEventListener("click",()=>{
 if(lock||card.classList.contains("flipped")) return;
-
 card.classList.add("flipped");
 
 if(!first){
@@ -266,17 +247,13 @@ first=card;
 }else{
 second=card;
 
-if(first.querySelector(".card-back").innerHTML ===
-second.querySelector(".card-back").innerHTML){
-
+if(first.querySelector("img").src===second.querySelector("img").src){
 matches++;
 first=null;
 second=null;
-
-if(matches===symbols.length){
-setTimeout(showFinal,700);
+if(matches===images.length){
+setTimeout(showFinal,800);
 }
-
 }else{
 lock=true;
 setTimeout(()=>{
@@ -294,25 +271,42 @@ grid.appendChild(card);
 });
 }
 
-
-/* -------- Final Reveal -------- */
+/* Final */
 
 function showFinal(){
-step++;
-updateProgress();
-
 document.getElementById("memoryArea").innerHTML="";
 document.getElementById("text").innerHTML=
-"Happy Birthday. You are not just part of my life. You are the reason it feels the way it does.";
+"Don’t always rely on progress bars. Rely on your boyfriend.";
 
 const btnArea=document.getElementById("buttons");
 btnArea.innerHTML="";
 
 let btn=document.createElement("button");
 btn.innerText="Go to the surprise";
+btn.classList.add("move-button");
+
 btn.onclick=()=>{
+prankClicks++;
+if(prankClicks===1){
+btn.innerText="I'm here dumbass.";
+btn.style.top="50px";
+btn.style.left="40px";
+}
+else if(prankClicks===2){
+btn.innerText="Are you drunk?";
+btn.style.top="120px";
+btn.style.left="150px";
+}
+else if(prankClicks===3){
+btn.innerText="Okay okay click properly.";
+btn.style.top="200px";
+btn.style.left="80px";
+}
+else{
 window.location.href="INSTAGRAM_REEL_LINK_HERE";
+}
 };
+
 btnArea.appendChild(btn);
 }
 
