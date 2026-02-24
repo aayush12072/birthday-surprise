@@ -3,221 +3,278 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Best Decision Ever 💗</title>
+<title>For You 💗</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #ffc0cb, #ff9eb5);
-    overflow: hidden;
-    color: white;
-    text-align: center;
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:linear-gradient(135deg,#ffb6c1,#ff69b4);
+color:white;
+text-align:center;
+overflow:hidden;
 }
 
-.container {
-    position: relative;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+.container{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+padding:20px;
 }
 
-.text-box {
-    font-size: 22px;
-    max-width: 90%;
-    min-height: 120px;
-    margin-bottom: 30px;
+.text-box{
+font-size:20px;
+min-height:120px;
+margin-bottom:25px;
 }
 
-button {
-    background: #ff5e8a;
-    border: none;
-    padding: 12px 25px;
-    margin: 10px;
-    font-size: 16px;
-    border-radius: 25px;
-    cursor: pointer;
-    color: white;
-    transition: 0.3s;
+button{
+background:#ff1493;
+border:none;
+padding:12px 20px;
+margin:8px;
+border-radius:25px;
+font-size:16px;
+color:white;
+cursor:pointer;
+width:80%;
+max-width:300px;
 }
 
-button:hover {
-    transform: scale(1.1);
-    background: #ff2f6d;
+button:active{
+transform:scale(0.95);
 }
 
-.progress {
-    position: absolute;
-    top: 20px;
-    font-size: 14px;
+.progress-bar{
+position:absolute;
+top:0;
+left:0;
+height:6px;
+background:white;
+width:0%;
+transition:0.5s;
 }
 
-.footer {
-    position: absolute;
-    bottom: 20px;
-    font-size: 12px;
-    opacity: 0.8;
+.memory-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
+width:90%;
+max-width:400px;
+margin:auto;
 }
 
-.heart {
-    position: absolute;
-    color: white;
-    animation: float 6s linear infinite;
+.card{
+background:#fff;
+color:#ff1493;
+height:70px;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:24px;
+border-radius:12px;
+cursor:pointer;
 }
 
-@keyframes float {
-    0% { transform: translateY(100vh); opacity: 1; }
-    100% { transform: translateY(-10vh); opacity: 0; }
+.hidden{
+background:#ff69b4;
+color:#ff69b4;
 }
 
-.shake {
-    animation: shake 0.4s;
+.footer{
+position:absolute;
+bottom:10px;
+font-size:12px;
+opacity:0.8;
 }
 
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-10px); }
-    75% { transform: translateX(10px); }
-}
 </style>
 </head>
 
 <body>
 
+<div class="progress-bar" id="progressBar"></div>
+
 <div class="container">
-    <div class="progress" id="progress">Level 1 / 6</div>
-    <div class="text-box" id="text"></div>
-    <div id="buttons"></div>
-    <div class="footer">Made with love by Aayush 💗</div>
+<div class="text-box" id="text"></div>
+<div id="buttons"></div>
+<div id="memoryGame"></div>
+<div class="footer">Made with love by Aayush 💗</div>
 </div>
 
-<audio id="bgMusic" loop>
-    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8d1b9a5e3.mp3" type="audio/mpeg">
-</audio>
-
 <script>
-const textBox = document.getElementById("text");
-const buttonsDiv = document.getElementById("buttons");
-const progress = document.getElementById("progress");
-const music = document.getElementById("bgMusic");
 
-let currentStep = 1;
+let currentSlide = 0;
+let totalSlides = 7; // change if adding more slides
+let progressBar = document.getElementById("progressBar");
 
-function typeText(text, callback) {
-    textBox.innerHTML = "";
-    let i = 0;
-    const interval = setInterval(() => {
-        textBox.innerHTML += text.charAt(i);
-        i++;
-        if (i >= text.length) {
-            clearInterval(interval);
-            if (callback) callback();
-        }
-    }, 30);
+function updateProgress(){
+let percent = (currentSlide / totalSlides) * 100;
+progressBar.style.width = percent + "%";
 }
 
-function createButtons(options) {
-    buttonsDiv.innerHTML = "";
-    options.forEach(option => {
-        const btn = document.createElement("button");
-        btn.innerText = option.text;
-        btn.onclick = option.action;
-        buttonsDiv.appendChild(btn);
-    });
+function showSlide(text, options){
+currentSlide++;
+updateProgress();
+document.getElementById("memoryGame").innerHTML="";
+document.getElementById("text").innerHTML=text;
+let btnArea = document.getElementById("buttons");
+btnArea.innerHTML="";
+options.forEach(opt=>{
+let btn=document.createElement("button");
+btn.innerText=opt.text;
+btn.onclick=opt.action;
+btnArea.appendChild(btn);
+});
 }
 
-function startMusic() {
-    music.play();
+function startGame(){
+showSlide("Hey Birthday Girl 💗 Ready to begin?",[
+{text:"Yes 😌",action:slide2},
+{text:"Only if it's cute",action:slide2}
+]);
 }
 
-function nextStep(text, options) {
-    currentStep++;
-    progress.innerText = "Level " + currentStep + " / 6";
-    typeText(text, () => createButtons(options));
+function slide2(){
+showSlide("Do you remember when we first started talking?",[
+{text:"Of course 🥹",action:slide3},
+{text:"Remind me",action:slide3}
+]);
 }
 
-function wrongAnswer() {
-    document.body.classList.add("shake");
-    setTimeout(() => {
-        document.body.classList.remove("shake");
-    }, 400);
+function slide3(){
+showSlide("What kind of couple are we?",[
+{text:"Cute & Soft",action:slide4},
+{text:"Crackhead Energy",action:slide4}
+]);
 }
 
-function showConfetti() {
-    for (let i = 0; i < 100; i++) {
-        const heart = document.createElement("div");
-        heart.className = "heart";
-        heart.innerHTML = "💖";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.fontSize = Math.random() * 20 + 10 + "px";
-        heart.style.animationDuration = Math.random() * 3 + 3 + "s";
-        document.body.appendChild(heart);
-    }
+function slide4(){
+showSlide("Did you imagine we'd become this?",[
+{text:"Yes 💗",action:slide5},
+{text:"It surprised me",action:slide5}
+]);
 }
 
-function startGame() {
-    typeText("Hey Birthday Girl 💗 Ready to play a tiny game?", () => {
-        createButtons([
-            { text: "I was born ready 😌", action: () => {
-                startMusic();
-                nextStep("Do you remember when we first started talking?", [
-                    { text: "Of course 🥹", action: memory },
-                    { text: "Remind me...", action: memory }
-                ]);
-            }},
-            { text: "Only if it's cute", action: () => {
-                startMusic();
-                nextStep("Trust me... it's very cute. Do you remember when we first started talking?", [
-                    { text: "Of course 🥹", action: memory },
-                    { text: "Remind me...", action: memory }
-                ]);
-            }}
-        ]);
-    });
+function slide5(){
+showSlide("Who will I annoy forever?",[
+{text:"Me 😌",action:slide6},
+{text:"Someone else",action:()=>alert("Wrong answer 😏")}
+]);
 }
 
-function memory() {
-    nextStep("That day changed my life. What kind of couple are we?", [
-        { text: "Cute & Soft", action: vibe },
-        { text: "Crackhead Energy", action: vibe }
-    ]);
+function slide6(){
+showSlide("Final Level Before Surprise... Ready for a challenge?",[
+{text:"Bring it on 💖",action:startMemoryGame}
+]);
 }
 
-function vibe() {
-    nextStep("Be honest... Did you imagine we'd become this?", [
-        { text: "Yes. I felt it.", action: emotional },
-        { text: "No. It surprised me.", action: emotional }
-    ]);
+
+
+
+
+
+// MEMORY GAME
+
+function startMemoryGame(){
+currentSlide++;
+updateProgress();
+
+document.getElementById("text").innerHTML="Match all pairs to unlock your birthday surprise 💕";
+document.getElementById("buttons").innerHTML="";
+let gameArea=document.getElementById("memoryGame");
+
+let symbols=["💖","🎂","🌸","😘","💝","🥰","🌹","💍"];
+let cards=[...symbols,...symbols];
+cards.sort(()=>0.5-Math.random());
+
+let first=null;
+let second=null;
+let lock=false;
+let matched=0;
+
+gameArea.innerHTML="";
+gameArea.className="memory-grid";
+
+cards.forEach(sym=>{
+let card=document.createElement("div");
+card.className="card hidden";
+card.innerText=sym;
+card.onclick=()=>{
+if(lock||card===first||!card.classList.contains("hidden")) return;
+card.classList.remove("hidden");
+
+if(!first){
+first=card;
+}else{
+second=card;
+if(first.innerText===second.innerText){
+matched++;
+first=null;
+second=null;
+if(matched===symbols.length){
+setTimeout(showBirthdayReveal,500);
+}
+}else{
+lock=true;
+setTimeout(()=>{
+first.classList.add("hidden");
+second.classList.add("hidden");
+first=null;
+second=null;
+lock=false;
+},800);
+}
+}
+};
+gameArea.appendChild(card);
+});
 }
 
-function emotional() {
-    nextStep("Final question... If I had to choose one person to annoy forever, who would it be?", [
-        { text: "Me 😌", action: proposal },
-        { text: "Someone else?", action: wrongAnswer }
-    ]);
+
+
+
+function showBirthdayReveal(){
+currentSlide++;
+updateProgress();
+
+document.getElementById("memoryGame").innerHTML="";
+document.getElementById("text").innerHTML="Happy Birthday My Love 💗 You are my best decision every single day.";
+let btnArea=document.getElementById("buttons");
+btnArea.innerHTML="";
+
+let surpriseBtn=document.createElement("button");
+surpriseBtn.innerText="Go to the Surprise 🎁";
+surpriseBtn.onclick=()=>{
+window.location.href="INSTAGRAM_REEL_LINK_HERE";
+};
+btnArea.appendChild(surpriseBtn);
+
+confetti();
 }
 
-function proposal() {
-    progress.innerText = "Final Level 💍";
-    showConfetti();
-    typeText("From the first hello to every laugh... You became my favorite person. Will you continue being my person for all birthdays to come? 💖", () => {
-        createButtons([
-            { text: "Yes. Always 💗", action: finalMessage },
-            { text: "Obviously, idiot 😌", action: finalMessage }
-        ]);
-    });
+
+
+
+// Simple Confetti
+function confetti(){
+for(let i=0;i<100;i++){
+let conf=document.createElement("div");
+conf.innerText="🎉";
+conf.style.position="absolute";
+conf.style.left=Math.random()*100+"vw";
+conf.style.top=Math.random()*100+"vh";
+document.body.appendChild(conf);
+setTimeout(()=>conf.remove(),2000);
+}
 }
 
-function finalMessage() {
-    showConfetti();
-    typeText("Happy Birthday, My Love 💗 You are the best decision I ever made.");
-    buttonsDiv.innerHTML = "";
-}
+
 
 startGame();
+
 </script>
 
 </body>
