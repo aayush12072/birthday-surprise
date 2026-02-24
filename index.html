@@ -3,176 +3,182 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For You ❤️</title>
+<title>For You</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
+
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:'Poppins',sans-serif;
 }
 
 body{
-background:linear-gradient(135deg,#ff9eb5,#ff4f81);
+font-family:'Inter',sans-serif;
+background:#fdf6f8;
+color:#2c2c2c;
 height:100vh;
-overflow:hidden;
-color:white;
 display:flex;
 justify-content:center;
 align-items:center;
+overflow:hidden;
 }
 
-.progress-wrapper{
-position:absolute;
-top:0;
-left:0;
+.wrapper{
 width:100%;
-height:6px;
-background:rgba(255,255,255,0.2);
+max-width:430px;
+height:100vh;
+display:flex;
+flex-direction:column;
+}
+
+.progress-container{
+height:3px;
+background:#eee;
 }
 
 .progress-bar{
 height:100%;
 width:0%;
-background:white;
-transition:0.4s ease;
+background:#d46a8c;
+transition:0.6s ease;
 }
 
-.container{
-width:100%;
-max-width:420px;
-padding:25px;
-text-align:center;
-}
-
-.card-box{
-background:rgba(255,255,255,0.15);
-backdrop-filter:blur(15px);
-padding:30px 20px;
-border-radius:25px;
-min-height:220px;
+.content{
+flex:1;
 display:flex;
 flex-direction:column;
 justify-content:center;
-transition:0.4s ease;
+padding:40px 30px;
+transition:0.5s ease;
 }
 
-.text-box{
-font-size:18px;
-margin-bottom:20px;
-min-height:80px;
+.title{
+font-family:'Playfair Display',serif;
+font-size:24px;
+margin-bottom:25px;
+line-height:1.4;
+text-align:center;
+}
+
+.buttons{
+display:flex;
+flex-direction:column;
+gap:16px; /* spacing added */
+margin-top:20px;
 }
 
 button{
-padding:12px 18px;
-margin:6px 0;
-border:none;
-border-radius:30px;
+padding:14px 20px;
+border-radius:40px;
+border:1px solid #d46a8c;
 background:white;
-color:#ff4f81;
-font-weight:600;
+font-size:15px;
+letter-spacing:0.5px;
 cursor:pointer;
 transition:0.3s;
 }
 
 button:hover{
-transform:scale(1.05);
+background:#d46a8c;
+color:white;
 }
 
 .memory-grid{
 display:grid;
 grid-template-columns:repeat(4,1fr);
 gap:12px;
-margin-top:15px;
+margin-top:30px;
 }
 
-.memory-card{
-width:100%;
+.card{
 aspect-ratio:1/1;
 perspective:1000px;
 }
 
-.memory-card-inner{
-position:relative;
+.card-inner{
 width:100%;
 height:100%;
+position:relative;
 transform-style:preserve-3d;
 transition:0.6s;
 }
 
-.memory-card.flipped .memory-card-inner{
+.card.flipped .card-inner{
 transform:rotateY(180deg);
 }
 
-.memory-front,
-.memory-back{
+.card-face{
 position:absolute;
 width:100%;
 height:100%;
-border-radius:15px;
+border-radius:12px;
 display:flex;
-justify-content:center;
 align-items:center;
-font-size:28px;
+justify-content:center;
+font-size:20px;
 backface-visibility:hidden;
 }
 
-.memory-front{
-background:white;
-color:#ff4f81;
-transform:rotateY(180deg);
+.card-front{
+background:#d46a8c;
+color:white;
 }
 
-.memory-back{
-background:rgba(255,255,255,0.3);
+.card-back{
+background:white;
+transform:rotateY(180deg);
+border:1px solid #ddd;
 }
 
 .footer{
-position:absolute;
-bottom:10px;
+text-align:center;
 font-size:12px;
-opacity:0.7;
+color:#999;
+padding-bottom:15px;
 }
 
 </style>
 </head>
-
 <body>
 
-<div class="progress-wrapper">
+<div class="wrapper">
+
+<div class="progress-container">
 <div class="progress-bar" id="progressBar"></div>
 </div>
 
-<div class="container">
-<div class="card-box" id="cardBox">
-<div class="text-box" id="text"></div>
-<div id="buttons"></div>
-<div id="memoryGame"></div>
-</div>
+<div class="content" id="content">
+<div class="title" id="text"></div>
+<div class="buttons" id="buttons"></div>
+<div id="memoryArea"></div>
 </div>
 
-<div class="footer">Made with love by Aayush ❤️</div>
+<div class="footer">Made for you</div>
+
+</div>
 
 <script>
 
 let step = 0;
-let totalSteps = 8; // edit when adding more slides
+let totalSteps = 8;
 const progressBar = document.getElementById("progressBar");
 
 function updateProgress(){
 progressBar.style.width = (step/totalSteps)*100 + "%";
 }
 
-function nextSlide(text, options){
+function renderSlide(text, options){
 step++;
 updateProgress();
-document.getElementById("memoryGame").innerHTML="";
+document.getElementById("memoryArea").innerHTML="";
 document.getElementById("text").innerHTML=text;
-let btnArea=document.getElementById("buttons");
+
+const btnArea=document.getElementById("buttons");
 btnArea.innerHTML="";
+
 options.forEach(opt=>{
 let btn=document.createElement("button");
 btn.innerText=opt.text;
@@ -182,69 +188,57 @@ btnArea.appendChild(btn);
 }
 
 
-
-/* ------------------ SLIDES ------------------ */
+/* -------- Slides -------- */
 
 function start(){
-nextSlide("Hey Birthday Girl ❤️ Ready for something special?",[
-{text:"Yes 😌",action:slide2},
-{text:"Only if it's cute",action:slide2}
+renderSlide("Before we continue… I want you to take a slow breath.",[
+{text:"Okay.",action:slide2}
 ]);
 }
 
 function slide2(){
-nextSlide("Do you remember when we first started talking?",[
-{text:"Of course 🥹",action:slide3},
-{text:"Remind me",action:slide3}
+renderSlide("Do you remember how this all began?",[
+{text:"Yes.",action:slide3},
+{text:"Remind me.",action:slide3}
 ]);
 }
 
 function slide3(){
-nextSlide("What kind of couple are we?",[
-{text:"Cute & Soft",action:slide4},
-{text:"Chaos Energy",action:slide4}
+renderSlide("Somehow, somewhere between conversations… you became important.",[
+{text:"Continue.",action:slide4}
 ]);
 }
 
 function slide4(){
-nextSlide("Did you imagine we'd become this?",[
-{text:"Yes ❤️",action:slide5},
-{text:"It surprised me",action:slide5}
+renderSlide("More than important. Essential.",[
+{text:"Go on.",action:slide5}
 ]);
 }
 
 function slide5(){
-nextSlide("Who will I annoy forever?",[
-{text:"Me 😌",action:slide6},
-{text:"Someone else",action:()=>alert("Wrong answer 😏")}
-]);
-}
-
-function slide6(){
-nextSlide("Now unlock your birthday surprise… Match all pairs 💕",[
-{text:"Start Game",action:startMemoryGame}
+renderSlide("Before I say anything more… you have to earn it.",[
+{text:"What do I have to do?",action:startMemoryGame}
 ]);
 }
 
 
-
-/* ------------------ MEMORY GAME ------------------ */
+/* -------- Memory Game -------- */
 
 function startMemoryGame(){
 step++;
 updateProgress();
 
 document.getElementById("buttons").innerHTML="";
-document.getElementById("text").innerHTML="";
+document.getElementById("text").innerHTML="Match all pairs to continue.";
 
-const symbols=["💖","🎂","🌹","😘","💝","🥰","💍","🌸"];
+const symbols=["♡","∞","✿","✧","☾","✦","♥","✺"];
 let cards=[...symbols,...symbols];
 cards.sort(()=>0.5-Math.random());
 
 const grid=document.createElement("div");
 grid.className="memory-grid";
-document.getElementById("memoryGame").innerHTML="";
-document.getElementById("memoryGame").appendChild(grid);
+document.getElementById("memoryArea").innerHTML="";
+document.getElementById("memoryArea").appendChild(grid);
 
 let first=null;
 let second=null;
@@ -253,12 +247,12 @@ let matches=0;
 
 cards.forEach(symbol=>{
 const card=document.createElement("div");
-card.className="memory-card";
+card.className="card";
 
 card.innerHTML=`
-<div class="memory-card-inner">
-<div class="memory-front">${symbol}</div>
-<div class="memory-back">💗</div>
+<div class="card-inner">
+<div class="card-face card-front"></div>
+<div class="card-face card-back">${symbol}</div>
 </div>
 `;
 
@@ -272,13 +266,15 @@ first=card;
 }else{
 second=card;
 
-if(first.innerHTML===second.innerHTML){
+if(first.querySelector(".card-back").innerHTML ===
+second.querySelector(".card-back").innerHTML){
+
 matches++;
 first=null;
 second=null;
 
 if(matches===symbols.length){
-setTimeout(showBirthdayReveal,700);
+setTimeout(showFinal,700);
 }
 
 }else{
@@ -289,7 +285,7 @@ second.classList.remove("flipped");
 first=null;
 second=null;
 lock=false;
-},800);
+},900);
 }
 }
 });
@@ -299,58 +295,26 @@ grid.appendChild(card);
 }
 
 
+/* -------- Final Reveal -------- */
 
-/* ------------------ BIRTHDAY REVEAL ------------------ */
-
-function showBirthdayReveal(){
+function showFinal(){
 step++;
 updateProgress();
 
-document.getElementById("memoryGame").innerHTML="";
+document.getElementById("memoryArea").innerHTML="";
 document.getElementById("text").innerHTML=
-"Happy Birthday My Love ❤️ You are my favorite chapter, my safest place, and my best decision every single day.";
+"Happy Birthday. You are not just part of my life. You are the reason it feels the way it does.";
 
-let btnArea=document.getElementById("buttons");
+const btnArea=document.getElementById("buttons");
 btnArea.innerHTML="";
 
-let surpriseBtn=document.createElement("button");
-surpriseBtn.innerText="Go to the Surprise 🎁";
-surpriseBtn.onclick=()=>{
+let btn=document.createElement("button");
+btn.innerText="Go to the surprise";
+btn.onclick=()=>{
 window.location.href="INSTAGRAM_REEL_LINK_HERE";
 };
-btnArea.appendChild(surpriseBtn);
-
-launchConfetti();
+btnArea.appendChild(btn);
 }
-
-
-
-/* ------------------ CONFETTI ------------------ */
-
-function launchConfetti(){
-for(let i=0;i<120;i++){
-let conf=document.createElement("div");
-conf.innerText="🎉";
-conf.style.position="fixed";
-conf.style.left=Math.random()*100+"vw";
-conf.style.top="-10px";
-conf.style.fontSize="20px";
-conf.style.animation="fall 3s linear forwards";
-document.body.appendChild(conf);
-
-setTimeout(()=>conf.remove(),3000);
-}
-}
-
-const style=document.createElement("style");
-style.innerHTML=`
-@keyframes fall{
-to{transform:translateY(110vh);}
-}
-`;
-document.head.appendChild(style);
-
-
 
 start();
 
